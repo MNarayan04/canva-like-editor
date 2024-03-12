@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        canvas {
+            border: 3px solid #000;
+        }
+        /* #captionInput{
+            color: red;
+            size: 25px;
+        } */
+    </style>
+    <title>Canva-like Editor</title>
+</head>
+<body>
+    <label for="">Enter the file from device (less than 10MB) :  </label>
+    <input type="file" id="imageInput" accept="image/*">
+    <br>
+    <br>
+    <br>
+    <label for="">Enter the text  : </label>
+    <input type="text" id="captionInput"  placeholder="Enter caption">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <label for="">Select the action to be taken : </label>
+    <input type="text" id="callToActionInput" placeholder="Enter call to action">
+    <br>
+    <br>
+    <br>
+    <label for="">Select the color  : </label>
+    <input type="color" id="backgroundColorInput" value="#ffffff" > 
+    <br>
+    <br>
+
+    <canvas id="canvas" width="300" height="300"></canvas>
+
+    <script>
+        class CanvaEditor {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.image = null;
+                this.caption = '';
+                this.callToAction = '';
+                this.backgroundColor = '#ffffff';
+            }
+
+            setBackgroundImage(imageUrl) {
+                this.image = new Image();
+                this.image.src = imageUrl;
+                this.image.onload = () => {
+                    this.draw();
+                };
+            }
+
+            setCaption(caption) {
+                this.caption = caption;
+                this.draw();
+            }
+            setCaptionColor(caption){
+                this.backgroundColor=caption;
+                this.draw=draw;
+            }
+
+            setCallToAction(callToAction) {
+                this.callToAction = callToAction;
+                this.draw();
+            }
+
+            setBackgroundColor(color) {
+                this.backgroundColor = color;
+                // this.caption=caption;
+                this.draw();
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw background
+                this.ctx.fillStyle = this.backgroundColor;
+                // this.ctx.fillStyle = caption;
+                //this.canvas.width
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw image
+                if (this.image) {
+                    this.ctx.drawImage(this.image, 50, 40, 200, 200);
+                }
+
+                // Draw text
+                this.ctx.fillStyle = '#000';
+                this.ctx.font = '16px Arial';
+                this.ctx.fillText(this.caption, 10, this.canvas.height -40);
+                this.ctx.fillText(this.callToAction, 10, this.canvas.height - 30);   
+            }
+
+        }
+
+        // Usage
+
+        const canvaEditor = new CanvaEditor('canvas');
+
+        document.getElementById('imageInput').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const imageUrl = URL.createObjectURL(file);
+            canvaEditor.setBackgroundImage(imageUrl);
+        });
+
+        document.getElementById('captionInput').addEventListener('input', (event) => {
+            const caption = event.target.value;
+            // style.color="red"
+            // canvaEditor.setCaptionColor(caption);
+            canvaEditor.setCaption(caption);
+
+        });
+
+        document.getElementById('callToActionInput').addEventListener('input', (event) => {
+            // const callToAction = event.target.value;
+            canvaEditor.setCallToAction(callToAction);
+        });
+
+        document.getElementById('backgroundColorInput').addEventListener('input', (event) => {
+            const backgroundColor = event.target.value;
+            canvaEditor.setBackgroundColor(backgroundColor);
+        });
+    </script>
+</body>
+</html>
